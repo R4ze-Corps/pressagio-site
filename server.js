@@ -6,7 +6,7 @@ const crypto = require("crypto");
 
 loadEnvFile();
 
-const port = Number(process.env.PORT || process.argv[2] || 4173);
+const port = Number(process.env.PORT || process.argv[2] || 8080);
 const root = __dirname;
 const sessions = new Map();
 const presences = new Map();
