@@ -50,7 +50,7 @@ const types = {
   ".svg": "image/svg+xml",
 };
 
-const server = http.createServer(async (request, response) => {
+async function handler(request, response) {
   try {
     const requestUrl = new URL(request.url || "/", `http://${request.headers.host}`);
 
@@ -98,7 +98,9 @@ const server = http.createServer(async (request, response) => {
   } catch (error) {
     sendJson(response, 500, { error: "server_error", message: error.message });
   }
-});
+}
+
+const server = http.createServer(handler);
 
 function handleDiscordStart(response) {
   if (!config.clientId || !config.clientSecret) {
@@ -701,11 +703,15 @@ function loadEnvFile() {
   }
 }
 
-server.listen(port, "0.0.0.0", () => {
-  console.log(`Pressagio site: http://127.0.0.1:${port}/`);
-  console.log(`Discord redirect URI: ${config.redirectUri}`);
-  startPresenceGateway();
-});
+if (!process.env.VERCEL) {
+  server.listen(port, "0.0.0.0", () => {
+    console.log(`Pressagio site: http://127.0.0.1:${port}/`);
+    console.log(`Discord redirect URI: ${config.redirectUri}`);
+    startPresenceGateway();
+  });
+}
+
+module.exports = handler;
 
 function getDiscordStatus(userId) {
   const presence = presences.get(userId);
