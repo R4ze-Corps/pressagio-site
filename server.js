@@ -701,7 +701,7 @@ function loadEnvFile() {
   }
 }
 
-server.listen(port, "127.0.0.1", () => {
+server.listen(port, "0.0.0.0", () => {
   console.log(`Pressagio site: http://127.0.0.1:${port}/`);
   console.log(`Discord redirect URI: ${config.redirectUri}`);
   startPresenceGateway();
