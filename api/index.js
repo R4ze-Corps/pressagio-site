@@ -32,7 +32,7 @@ const config = {
   redirectUri: process.env.DISCORD_REDIRECT_URI || (process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}/auth/discord/callback`
     : `http://127.0.0.1:${process.env.PORT || 8080}/auth/discord/callback`),
-  scopes: process.env.DISCORD_SCOPES || "identify guilds guilds.members.read",
+  scopes: process.env.DISCORD_SCOPES || "identify guilds",
   guildId: process.env.DISCORD_GUILD_ID || "1500607972605296713",
   fivemGuildId: process.env.FIVEM_GUILD_ID || "1153823875004637204",
   botToken: process.env.DISCORD_BOT_TOKEN || "",
