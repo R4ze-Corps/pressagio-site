@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Presságio | Central da Organização</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <section class="login-screen" id="login-screen" aria-label="Login com Discord">
+      <div class="login-window">
+        <div class="login-chrome" aria-hidden="true">
+          <span class="mac-dot close"></span>
+          <span class="mac-dot minimize"></span>
+          <span class="mac-dot maximize"></span>
+        </div>
+        <div class="login-content">
+          <img class="login-logo" src="assets/pressagio-central-login.png" alt="Presságio Central" />
+          <p class="eyebrow">Acesso restrito</p>
+          <h2>Entre para acessar a central</h2>
+          <p>Use sua conta do Discord para identificar seu cargo e liberar as áreas permitidas da organização.</p>
+          <button class="discord-button login-discord" id="login-screen-button" type="button">
+            <span data-icon="discord"></span> Entrar com Discord
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a class="brand" href="#inicio" data-route="inicio">
+          <span class="brand-mark">
+            <img src="assets/pressagio-logo.png" alt="Logo Presságio" />
+          </span>
+          <span>
+            <strong>Presságio</strong>
+            <small>Central RP</small>
+          </span>
+        </a>
+
+        <nav class="nav-group" aria-label="Menu principal">
+          <button class="nav-item active" data-route="inicio" type="button">
+            <span data-icon="home"></span> Início
+          </button>
+          <button class="nav-item" data-route="perfil" type="button">
+            <span data-icon="user"></span> Meu Perfil
+          </button>
+          <button class="nav-item" data-route="metas" type="button">
+            <span data-icon="target"></span> Metas
+          </button>
+          <button class="nav-item" data-route="eventos" type="button">
+            <span data-icon="calendar"></span> Eventos
+          </button>
+          <button class="nav-item" data-route="ranking" type="button">
+            <span data-icon="trophy"></span> Ranking
+          </button>
+          <button class="nav-item" data-route="recrutamento" type="button">
+            <span data-icon="file"></span> Recrutamento
+          </button>
+          <button class="nav-item" data-route="loja" type="button">
+            <span data-icon="store"></span> Benefícios
+          </button>
+        </nav>
+
+        <div class="nav-divider"></div>
+
+        <nav class="nav-group" aria-label="Liderança">
+          <p class="nav-label">Liderança</p>
+          <button class="nav-item" data-route="lideranca" data-min-role="gerente" type="button">
+            <span data-icon="chart"></span> Dashboard
+          </button>
+          <button class="nav-item" data-route="membros" data-min-role="gerente" type="button">
+            <span data-icon="users"></span> Membros
+          </button>
+          <button class="nav-item" data-route="advertencias" data-min-role="lider" type="button">
+            <span data-icon="alert"></span> Advertências
+          </button>
+          <button class="nav-item" data-route="logs" data-min-role="lider" type="button">
+            <span data-icon="list"></span> Logs
+          </button>
+        </nav>
+
+        <div class="bot-card">
+          <span class="status-dot"></span>
+          <div>
+            <strong>Bot conectado</strong>
+            <small>Discord, metas e avisos sincronizados</small>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <button class="icon-button menu-toggle" type="button" aria-label="Abrir menu">
+            <span data-icon="menu"></span>
+          </button>
+          <div>
+            <p class="eyebrow">Organização FiveM</p>
+            <h1 id="page-title">Início</h1>
+          </div>
+          <div class="top-actions">
+            <button class="discord-button" id="discord-login" type="button">
+              <span data-icon="discord"></span> Conectar Discord
+            </button>
+            <div class="user-chip">
+              <span class="avatar">KR</span>
+              <span>
+                <strong id="current-user">Kauan Raze</strong>
+                <small id="current-role">Liderança</small>
+              </span>
+            </div>
+          </div>
+        </header>
+
+        <section class="view active" id="view-inicio" aria-labelledby="page-title">
+          <div class="home-grid">
+            <article class="welcome-panel">
+              <div>
+                <p class="eyebrow">Organização FiveM</p>
+                <h2>Presságio Central</h2>
+                <p>Painel interno para membros, metas, eventos e recrutamento.</p>
+                <div class="hero-actions">
+                  <button class="primary-button" data-route="perfil" type="button">Abrir Painel</button>
+                  <button class="ghost-button" data-route="recrutamento" type="button">Recrutamento</button>
+                </div>
+              </div>
+            </article>
+            <article class="hero-panel" aria-label="Resumo operacional">
+              <div class="signal-row">
+                <span>Meta do baú</span>
+                <strong>78%</strong>
+              </div>
+              <div class="progress-track"><span style="width: 78%"></span></div>
+              <div class="inline-stats">
+                <span><strong>42</strong> Membros</span>
+                <span><strong>6</strong> Eventos</span>
+                <span><strong>3</strong> Alertas</span>
+              </div>
+            </article>
+          </div>
+
+          <div class="quick-grid">
+            <button class="quick-card" data-route="metas" type="button"><span data-icon="target"></span><strong>Metas</strong><small>Status do baú</small></button>
+            <button class="quick-card" data-route="eventos" type="button"><span data-icon="calendar"></span><strong>Eventos</strong><small>Próximas ações</small></button>
+            <button class="quick-card" data-route="recrutamento" type="button"><span data-icon="file"></span><strong>Recrutamento</strong><small>Fichas abertas</small></button>
+            <button class="quick-card" data-route="ranking" type="button"><span data-icon="trophy"></span><strong>Ranking</strong><small>Destaques</small></button>
+          </div>
+
+          <div class="section-grid three">
+            <article class="panel compact-panel">
+              <div class="panel-head"><h3>Atividade recente</h3></div>
+              <div class="mini-list">
+                <div><strong>Lua Santos entrou</strong><span>Hoje, 19:40</span></div>
+                <div><strong>Meta semanal concluída</strong><span>25 membros</span></div>
+                <div><strong>Evento criado</strong><span>Corrida Noturna</span></div>
+              </div>
+            </article>
+            <article class="panel compact-panel">
+              <div class="panel-head"><h3>Alertas</h3><span class="pill yellow">3</span></div>
+              <div class="mini-list">
+                <div><strong>Munição leve</strong><span>Abaixo do ideal</span></div>
+                <div><strong>Kit médico</strong><span>Repor hoje</span></div>
+                <div><strong>Resumo semanal</strong><span>Disponível</span></div>
+              </div>
+            </article>
+            <article class="panel compact-panel">
+              <div class="panel-head"><h3>Próximo evento</h3></div>
+              <div class="event-mini">
+                <span class="pill blue">28/05 · 21:00</span>
+                <strong>Corrida Noturna</strong>
+                <p>Pier · 18 confirmados</p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="view" id="view-perfil">
+          <div class="content-grid profile-layout">
+            <article class="panel profile-panel">
+              <div class="profile-head">
+                <span class="large-avatar" id="profile-avatar">KR</span>
+                <div>
+                  <p class="eyebrow">Meu painel</p>
+                  <h2 id="profile-name">Kauan Raze</h2>
+                  <p id="profile-subtitle">Lider geral da organizacao</p>
+                </div>
+              </div>
+              <div class="info-grid">
+                <div><span>Cargo</span><strong id="profile-role">Lider</strong></div>
+                <div><span>ID Discord</span><strong id="profile-discord-id">832901774100</strong></div>
+                <div><span>Passaporte FiveM</span><strong id="profile-fivem-passport">Não registrado</strong></div>
+                <div><span>Entrada</span><strong id="profile-joined">12/02/2026</strong></div>
+                <div class="status-field"><span>Status Discord</span><strong class="status-dot-label gray" id="profile-discord-status"><span>Indisponível</span><i></i></strong></div>
+                <div><span>Servidor</span><strong id="profile-server">Presságio</strong></div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="view" id="view-metas">
+          <div class="section-grid two">
+            <article class="panel">
+              <div class="panel-head">
+                <div>
+                  <p class="eyebrow">Bau da organizacao</p>
+                  <h3>Produtos de meta</h3>
+                </div>
+                <button class="icon-button" id="refresh-goals" type="button" title="Atualizar"><span data-icon="refresh"></span></button>
+              </div>
+              <p class="sync-label" id="goal-sync-label">Aguardando atualização</p>
+              <div id="goal-list" class="goal-list"></div>
+            </article>
+
+            <article class="panel alert-panel">
+              <div class="panel-head">
+                <h3>Alertas do bot</h3>
+                <span class="pill yellow">3 avisos</span>
+              </div>
+              <div class="notice-list">
+                <div><strong>Ferro acabando</strong><span>DM enviada para lideranca.</span></div>
+                <div><strong>Níquel abaixo do minimo</strong><span>Canal privado notificado.</span></div>
+                <div><strong>Resumo semanal pronto</strong><span>25 membros bateram meta.</span></div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="view" id="view-eventos">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Calendario</p>
+                <h3>Eventos cadastrados</h3>
+              </div>
+              <button class="primary-button compact" id="new-event" type="button"><span data-icon="plus"></span> Criar evento</button>
+            </div>
+            <div id="event-list" class="event-list"></div>
+          </div>
+        </section>
+
+        <section class="view" id="view-ranking">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Competicao interna</p>
+                <h3>Ranking da semana</h3>
+              </div>
+              <div class="segmented" role="tablist">
+                <button type="button">Eventos</button>
+              </div>
+            </div>
+            <div id="ranking-list" class="ranking-list"></div>
+          </div>
+        </section>
+
+        <section class="view" id="view-recrutamento">
+          <div class="content-grid recruitment-layout">
+            <form class="panel form-panel" id="recruitment-form">
+              <div class="panel-head">
+                <div>
+                  <p class="eyebrow">Publico</p>
+                  <h3>Ficha de recrutamento</h3>
+                </div>
+              </div>
+              <div class="form-grid">
+                <label>Nome<input required name="nome" placeholder="Seu nome no RP" /></label>
+                <label>Idade<input required name="idade" type="number" placeholder="18" /></label>
+                <label>Passaporte/ID<input required name="passaporte" placeholder="12345" /></label>
+                <label>Quem indicou?<input name="indicacao" placeholder="Opcional" /></label>
+              </div>
+              <button class="primary-button" type="submit">Enviar ficha para analise</button>
+            </form>
+            <article class="panel">
+              <h3>Fluxo com Discord</h3>
+              <div class="flow-list">
+                <div><span data-icon="file"></span><p>Ficha enviada pelo site.</p></div>
+                <div><span data-icon="discord"></span><p>Bot publica em canal privado.</p></div>
+                <div><span data-icon="check"></span><p>Lideranca aprova ou recusa.</p></div>
+                <div><span data-icon="users"></span><p>Cargo e acesso sao liberados.</p></div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="view" id="view-regras">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Conduta</p>
+                <h3>Regras da organizacao</h3>
+              </div>
+              <button class="primary-button compact" id="accept-rules" type="button"><span data-icon="check"></span> Li e aceito</button>
+            </div>
+            <div id="rules-list" class="rules-list"></div>
+          </div>
+        </section>
+
+        <section class="view" id="view-loja">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Pontos internos</p>
+                <h3>Loja de benefícios</h3>
+              </div>
+              <span class="points-badge">3.450 pontos</span>
+            </div>
+            <div id="store-list" class="store-grid"></div>
+          </div>
+        </section>
+
+        <section class="view" id="view-lideranca">
+          <div class="stats-grid">
+            <article><span data-icon="users"></span><strong>42</strong><small>Total de membros</small></article>
+            <article><span data-icon="activity"></span><strong>34</strong><small>Ativos</small></article>
+            <article><span data-icon="pause"></span><strong>5</strong><small>Afastados</small></article>
+            <article><span data-icon="alert"></span><strong>3</strong><small>Advertidos</small></article>
+          </div>
+          <div class="section-grid two">
+            <article class="panel">
+              <div class="panel-head"><h3>Ultimas punicoes</h3></div>
+              <div id="punishment-list" class="table-list"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-head"><h3>Entradas e saidas</h3></div>
+              <div class="timeline compact-timeline">
+                <div><span></span><p><strong>Lua Santos entrou</strong><small>Hoje, 19:40</small></p></div>
+                <div><span></span><p><strong>Nox saiu da organizacao</strong><small>Ontem, 23:10</small></p></div>
+                <div><span></span><p><strong>Rafa aprovado no recrutamento</strong><small>24/05/2026</small></p></div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="view" id="view-membros">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Gerencia</p>
+                <h3>Gerenciar membros</h3>
+              </div>
+              <input class="search-input" id="member-search" placeholder="Buscar membro" />
+            </div>
+            <div id="member-table" class="member-table"></div>
+          </div>
+        </section>
+
+        <section class="view" id="view-advertencias">
+          <div class="content-grid warning-layout">
+            <form class="panel form-panel" id="warning-form">
+              <div class="panel-head"><h3>Aplicar advertencia</h3></div>
+              <div class="form-grid single">
+                <label>Membro advertido<select name="membro"></select></label>
+                <label>Gravidade<select name="gravidade"><option>Leve</option><option>Media</option><option>Grave</option></select></label>
+                <label>Motivo<textarea name="motivo" rows="4" required></textarea></label>
+              </div>
+              <button class="primary-button" type="submit">Registrar e notificar</button>
+            </form>
+            <article class="panel">
+              <div class="panel-head">
+                <h3>Advertencias ativas</h3>
+                <span class="pill red">3 = revisar membro</span>
+              </div>
+              <div id="warning-list" class="table-list"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="view" id="view-logs">
+          <div class="sub-menu">
+            <button class="sub-card active" data-subroute="entradas-saidas" type="button">
+              <span data-icon="users"></span>
+              <strong>Entradas &amp; Saídas</strong>
+              <small>Movimentação de membros</small>
+            </button>
+            <button class="sub-card" data-subroute="msg-excluida" type="button">
+              <span data-icon="alert"></span>
+              <strong>Mensagem Excluída</strong>
+              <small>Registro de exclusões</small>
+            </button>
+            <button class="sub-card" data-subroute="msg-editada" type="button">
+              <span data-icon="file"></span>
+              <strong>Mensagem Editada</strong>
+              <small>Registro de edições</small>
+            </button>
+            <button class="sub-card" data-subroute="call" type="button">
+              <span data-icon="activity"></span>
+              <strong>Call</strong>
+              <small>Registro de chamadas</small>
+            </button>
+          </div>
+
+          <div class="sub-view active" id="subview-entradas-saidas">
+            <div class="section-grid two">
+              <div class="panel">
+                <div class="panel-head">
+                  <h3>Entradas</h3>
+                </div>
+                <div id="entradas-list" class="timeline"></div>
+              </div>
+              <div class="panel">
+                <div class="panel-head">
+                  <h3>Saídas</h3>
+                </div>
+                <div id="saidas-list" class="timeline"></div>
+              </div>
+            </div>
+          </div>
+          <div class="sub-view" id="subview-msg-excluida">
+            <div class="panel">
+              <div class="panel-head">
+                <h3>Mensagem Excluída</h3>
+              </div>
+              <div id="msg-excluida-list" class="log-list"></div>
+            </div>
+          </div>
+          <div class="sub-view" id="subview-msg-editada">
+            <div class="panel">
+              <div class="panel-head">
+                <h3>Mensagem Editada</h3>
+              </div>
+              <div id="msg-editada-list" class="log-list"></div>
+            </div>
+          </div>
+          <div class="sub-view" id="subview-call">
+            <div class="panel">
+              <div class="panel-head">
+                <h3>Call</h3>
+              </div>
+              <div id="call-list" class="log-list"></div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="app.js"></script>
+  </body>
+</html>
