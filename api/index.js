@@ -4,7 +4,6 @@ const path = require("path");
 const crypto = require("crypto");
 
 const root = path.resolve(__dirname, "..");
-const sessions = new Map();
 const presences = globalThis.__presences || new Map();
 globalThis.__presences = presences;
 let goalStock = [
@@ -30,12 +29,45 @@ const profileRoleIds = new Set([
 const config = {
   clientId: process.env.DISCORD_CLIENT_ID || "",
   clientSecret: process.env.DISCORD_CLIENT_SECRET || "",
-  redirectUri: process.env.DISCORD_REDIRECT_URI || `http://127.0.0.1:${process.env.PORT || 8080}/auth/discord/callback`,
+  redirectUri: process.env.DISCORD_REDIRECT_URI || (process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}/auth/discord/callback`
+    : `http://127.0.0.1:${process.env.PORT || 8080}/auth/discord/callback`),
   scopes: process.env.DISCORD_SCOPES || "identify guilds guilds.members.read",
   guildId: process.env.DISCORD_GUILD_ID || "1500607972605296713",
   fivemGuildId: process.env.FIVEM_GUILD_ID || "1153823875004637204",
   botToken: process.env.DISCORD_BOT_TOKEN || "",
 };
+
+const SESSION_TTL = 7 * 24 * 60 * 60 * 1000;
+const SESSION_SECRET = crypto.createHash("sha256")
+  .update(config.clientSecret || config.clientId || "pressagio-fallback")
+  .digest("hex");
+
+function toBase64url(str) {
+  return Buffer.from(str).toString("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+function fromBase64url(str) {
+  return Buffer.from(str.replace(/-/g, "+").replace(/_/g, "/"), "base64").toString("utf8");
+}
+function signSession(data) {
+  const payload = toBase64url(JSON.stringify(data));
+  const sig = crypto.createHmac("sha256", SESSION_SECRET).update(payload).digest("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  return payload + "." + sig;
+}
+function unsignSession(token) {
+  const dot = token.indexOf(".");
+  if (dot === -1) return null;
+  const payload = token.slice(0, dot);
+  const sig = token.slice(dot + 1);
+  const expected = crypto.createHmac("sha256", SESSION_SECRET).update(payload).digest("base64").replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  if (sig.length !== expected.length) return null;
+  let match = true;
+  for (let i = 0; i < sig.length; i++) {
+    if (sig.charCodeAt(i) !== expected.charCodeAt(i)) { match = false; break; }
+  }
+  if (!match) return null;
+  try { return JSON.parse(fromBase64url(payload)); } catch { return null; }
+}
 
 const types = {
   ".html": "text/html; charset=utf-8",
@@ -134,21 +166,19 @@ async function handleDiscordCallback(request, response, requestUrl) {
   const guilds = config.scopes.includes("guilds") ? await fetchDiscordGuilds(token.access_token) : [];
   const guildInfo = await fetchConfiguredGuildInfo(user, guilds);
   const fivemInfo = await fetchFivemInfo(user, token.access_token);
-  const sessionId = crypto.randomBytes(32).toString("hex");
 
-  sessions.set(sessionId, {
+  const sessionData = {
     createdAt: Date.now(),
-    token,
     user: normalizeDiscordUser(user),
-    guilds,
     guildInfo,
     fivemInfo,
-  });
+  };
+  const sessionToken = signSession(sessionData);
 
   response.writeHead(302, {
     Location: "/",
     "Set-Cookie": [
-      cookie("pressagio_session", sessionId, { maxAge: 60 * 60 * 24 * 7, httpOnly: true }),
+      cookie("pressagio_session", sessionToken, { maxAge: 60 * 60 * 24 * 7, httpOnly: true }),
       cookie("pressagio_oauth_state", "", { maxAge: 0, httpOnly: true }),
     ],
   });
@@ -169,12 +199,6 @@ function handleSession(request, response) {
     discordStatus: getDiscordStatus(session.user.id),
     guild: session.guildInfo,
     fivem: session.fivemInfo,
-    guilds: session.guilds.map((guild) => ({
-      id: guild.id,
-      name: guild.name,
-      owner: guild.owner,
-      permissions: guild.permissions,
-    })),
   });
 }
 
@@ -210,11 +234,6 @@ async function handleMembers(request, response) {
 }
 
 function handleLogout(request, response) {
-  const cookies = parseCookies(request.headers.cookie || "");
-  if (cookies.pressagio_session) {
-    sessions.delete(cookies.pressagio_session);
-  }
-
   response.writeHead(302, {
     Location: "/",
     "Set-Cookie": cookie("pressagio_session", "", { maxAge: 0, httpOnly: true }),
@@ -619,15 +638,13 @@ function normalizeDiscordUser(user) {
 
 function getSession(request) {
   const cookies = parseCookies(request.headers.cookie || "");
-  const session = sessions.get(cookies.pressagio_session);
+  const token = cookies.pressagio_session;
+  if (!token) return null;
 
+  const session = unsignSession(token);
   if (!session) return null;
 
-  const maxAge = 1000 * 60 * 60 * 24 * 7;
-  if (Date.now() - session.createdAt > maxAge) {
-    sessions.delete(cookies.pressagio_session);
-    return null;
-  }
+  if (Date.now() - session.createdAt > SESSION_TTL) return null;
 
   return session;
 }
